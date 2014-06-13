@@ -5,9 +5,8 @@
  */
 package com.essa.operations;
 
-import com.essa.util.Date;
-import com.essa.util.Time;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Comparator;
 
 /**
@@ -21,25 +20,35 @@ public class TimeTrack implements Comparable<TimeTrack>, Serializable {
     private String employeeID;
     private String employeeName;
     private String client;
-    private Date startDate;
-    private Date endDate;
-    private Time startTime;
-    private Time endTime;
+    private Calendar start;
+    private Calendar finish;
+    /*private Date startDate;
+     private Date endDate;
+     private Time startTime;
+     private Time endTime;*/
     private int breakTotal; // in minutes
-    private int breakPeriod;// 1 = between 6:00-22:00, 2 = between 22:00-06:00, 3 = equally distributed
+    private int breakShift;// 1 = between 6:00-14:00, 2 = between 14:00-22:00, 3 = between 22:00-06:00, 4 = equally distributed, 12 = distributed in 1 and 2, 13 = distributed in 1 and 3, 23 = distributed in 2 and 3
     private float employeeDisplacement;
     private String description;
+    private float hoursShift1;
+    private float hoursShift2;
+    private float hoursShift3;
+    private float overHoursShift1;
+    private float overHoursShift2;
+    private float overHoursShift3;
 
-    public TimeTrack(String employeeID, String employeeName, String client, Date startDate, Date endDate, Time startTime, Time endTime, int breakTotal, int breakPeriod, float employeeDisplacement, String description) {
+    public TimeTrack(String employeeID, String employeeName, String client, Calendar start, Calendar finish, int breakTotal, int breakShift, float employeeDisplacement, String description) {
         this.employeeID = employeeID;
         this.employeeName = employeeName;
         this.client = client;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.start = start;
+        this.finish = finish;
+        /*this.startDate = startDate;
+         this.endDate = endDate;
+         this.startTime = startTime;
+         this.endTime = endTime;*/
         this.breakTotal = breakTotal;
-        this.breakPeriod = breakPeriod;
+        this.breakShift = breakShift;
         this.employeeDisplacement = employeeDisplacement;
         this.description = description;
     }
@@ -72,22 +81,23 @@ public class TimeTrack implements Comparable<TimeTrack>, Serializable {
         this.client = client;
     }
 
-    public Time getStartTime() {
-        return startTime;
+    public Calendar getStart() {
+        return start;
     }
 
-    public void setStartTime(Time startTime) {
-        this.startTime = startTime;
+    public void setStart(Calendar start) {
+        this.start = start;
     }
 
-    public Time getEndTime() {
-        return endTime;
+    public Calendar getFinish() {
+        return finish;
     }
 
-    public void setEndTime(Time endTime) {
-        this.endTime = endTime;
+    public void setFinish(Calendar finish) {
+        this.finish = finish;
     }
-  public int getBreakTotal() {
+
+    public int getBreakTotal() {
         return breakTotal;
     }
 
@@ -95,13 +105,6 @@ public class TimeTrack implements Comparable<TimeTrack>, Serializable {
         this.breakTotal = breakTotal;
     }
 
-    public int getBreakPeriod() {
-        return breakPeriod;
-    }
-
-    public void setBreakPeriod(int breakPeriod) {
-        this.breakPeriod = breakPeriod;
-    }
     public float getEmployeeDisplacement() {
         return employeeDisplacement;
     }
@@ -118,28 +121,12 @@ public class TimeTrack implements Comparable<TimeTrack>, Serializable {
         this.description = description;
     }
 
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
     @Override
     public String toString() {
         return getEmployeeID() + "\t" + getEmployeeName() + "\t" + getClient()
-                + "\t" + getStartDate() + "\t" + getEndDate() 
-                + "\t" + getStartTime().toUniversalString() + "\t" + getEndTime().toUniversalString() 
-                + "\t" + getBreakTotal() + "\t" + getBreakPeriod()
+                + "\t" + getStart() + "\t" + getFinish()
+                //+ "\t" + getStartTime().toUniversalString() + "\t" + getEndTime().toUniversalString()
+                + "\t" + getBreakTotal() + "\t" + getBreakShift()
                 + "\t" + getEmployeeDisplacement() + "\t" + getDescription();
     }
 
@@ -150,13 +137,13 @@ public class TimeTrack implements Comparable<TimeTrack>, Serializable {
         }
         final TimeTrack t = (TimeTrack) o;
         //System.err.println(this.getEmployeeID()+ this.getClient() + this.getStartDate()+ this.getStartTime().toUniversalString());
-        return (this.getEmployeeID()+ this.getClient() + this.getStartDate()+ this.getStartTime().toUniversalString()).equals(t.getEmployeeID()+ t.getClient() + t.getStartDate()+ t.getStartTime().toUniversalString());
+        return (this.getEmployeeID() + this.getClient() + this.getStart()).equals(t.getEmployeeID() + t.getClient() + t.getStart());
         //return (this.hashCode() == t.hashCode());
     }
 
     @Override
     public int hashCode() {
-        return (getStartDate().hashCode() + getClient().hashCode() + getEmployeeID().hashCode() + getStartTime().hashCode());
+        return (getClient().hashCode() + getEmployeeID().hashCode() + getStart().hashCode());
     }
 
     @Override
@@ -165,8 +152,7 @@ public class TimeTrack implements Comparable<TimeTrack>, Serializable {
             throw new NullPointerException();
         } else if (this.equals(t)) {
             return 0;
-        } 
-        else {
+        } else {
             return 1;
             //return this.compareTo(t);
         }
@@ -186,17 +172,72 @@ public class TimeTrack implements Comparable<TimeTrack>, Serializable {
         };
     }
 
-    // inner class for ordering based on Aankoopprijs
     public static Comparator<TimeTrack> getStartDateComparator() {
         return new Comparator<TimeTrack>() {
             @Override
             public int compare(TimeTrack t1, TimeTrack t2) {
                 if (!(t1.equals(t2))) {
-                    return t1.getStartDate().compareTo(t2.getStartDate());
+                    return t1.getStart().compareTo(t2.getStart());
                 } else {
                     return 0;
                 }
             }
         };
-    }  
+    }
+
+    public float getHoursShift1() {
+        return hoursShift1;
+    }
+
+    public void setHoursShift1(float hoursShift1) {
+        this.hoursShift1 = hoursShift1;
+    }
+
+    public float getHoursShift2() {
+        return hoursShift2;
+    }
+
+    public void setHoursShift2(float hoursShift2) {
+        this.hoursShift2 = hoursShift2;
+    }
+
+    public float getHoursShift3() {
+        return hoursShift3;
+    }
+
+    public void setHoursShift3(float hoursShift3) {
+        this.hoursShift3 = hoursShift3;
+    }
+
+    public float getOverHoursShift1() {
+        return overHoursShift1;
+    }
+
+    public void setOverHoursShift1(float overHoursShift1) {
+        this.overHoursShift1 = overHoursShift1;
+    }
+
+    public float getOverHoursShift2() {
+        return overHoursShift2;
+    }
+
+    public void setOverHoursShift2(float overHoursShift2) {
+        this.overHoursShift2 = overHoursShift2;
+    }
+
+    public float getOverHoursShift3() {
+        return overHoursShift3;
+    }
+
+    public void setOverHoursShift3(float overHoursShift3) {
+        this.overHoursShift3 = overHoursShift3;
+    }
+
+    public int getBreakShift() {
+        return breakShift;
+    }
+
+    public void setBreakShift(int breakShift) {
+        this.breakShift = breakShift;
+    }
 }

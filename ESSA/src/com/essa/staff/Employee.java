@@ -6,7 +6,7 @@
 package com.essa.staff;
 
 import com.essa.client.Company;
-import com.essa.EmployeeContractType;
+import com.essa.EmployeeContract;
 import com.essa.util.Date;
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -19,13 +19,13 @@ public class Employee extends Person {
 
     //private String workPlaceCompanyCode;
     private BigDecimal salary;
-    private EmployeeContractType empContractType;
+    private EmployeeContract empContractType;
     private Company empWorksAt;
     private float displacement;
 
     public Employee(String sSNumber, String firstName, String lastName, String gender,
             Date birthDate, String birthPlace, String address, long postcodeCode,
-            BigDecimal salary, EmployeeContractType empContractType,
+            BigDecimal salary, EmployeeContract empContractType,
             Company empWorksAt, float displacement) throws ParseException {
         super(sSNumber, firstName, lastName, gender, birthDate, birthPlace, address, postcodeCode);
         this.salary = salary;
@@ -70,11 +70,11 @@ public class Employee extends Person {
         this.salary = salary;
     }
 
-    public EmployeeContractType getEmpContractType() {
+    public EmployeeContract getEmpContractType() {
         return empContractType;
     }
 
-    public void setEmpContractType(EmployeeContractType empContractType) {
+    public void setEmpContractType(EmployeeContract empContractType) {
         this.empContractType = empContractType;
     }
 

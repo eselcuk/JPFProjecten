@@ -6,7 +6,7 @@
 package com.essa.main;
 
 import com.essa.client.Company;
-import com.essa.EmployeeContractType;
+import com.essa.EmployeeContract;
 import com.essa.util.FileAndObjectOIStream;
 import com.essa.staff.Employee;
 import com.essa.util.Date;
@@ -27,15 +27,15 @@ public class Test {
         SortedSet employees = new TreeSet();
         String fileName = "employee.ser";
         employees.add(new Employee("74041446122", "Ekber", "Selcuk", "Male", new Date(11, 4, 1974), "Istanbul", "Hermesdijkstraat 17", 1,
-                BigDecimal.valueOf(20.00), EmployeeContractType.SERVANT, new Company("CFC", "CFC BVBA", "Weg naar As 264", 1,"BE"), 100F));
+                BigDecimal.valueOf(20.00), EmployeeContract.SERVANT, new Company("CFC", "CFC BVBA", "Weg naar As 264", 1,"BE"), 100F));
         employees.add(new Employee("74041446123", "Selcuk", "Ekber", "Male", new Date(14, 4, 1974), "Istanbul", "Hermesdijkstraat 17", 1,
-                BigDecimal.valueOf(20.00), EmployeeContractType.WORKER, new Company("CFC", "Compact BVBA", "Weg naar As 264", 1,"BE"), 100F));
+                BigDecimal.valueOf(20.00), EmployeeContract.WORKER, new Company("CFC", "Compact BVBA", "Weg naar As 264", 1,"BE"), 100F));
         employees.add(new Employee("74041446126", "Selcuk", "Ekber", "Male", new Date(14, 4, 1974), "Istanbul", "Hermesdijkstraat 17", 1,
-                BigDecimal.valueOf(20.00), EmployeeContractType.WORKER, new Company("CFC", "Compact BVBA", "Weg naar As 264", 1,"BE"), 100F));
+                BigDecimal.valueOf(20.00), EmployeeContract.WORKER, new Company("CFC", "Compact BVBA", "Weg naar As 264", 1,"BE"), 100F));
         employees.add(new Employee("74041446124", "Dirx", "Belig", "Male", new Date(14, 4, 1974), "Istanbul", "Hermesdijkstraat 17", 1,
-                BigDecimal.valueOf(20.00), EmployeeContractType.SERVANT, new Company("CFC", "Compact BVBA", "Weg naar As 264", 1,"BE"), 100F));
+                BigDecimal.valueOf(20.00), EmployeeContract.SERVANT, new Company("CFC", "Compact BVBA", "Weg naar As 264", 1,"BE"), 100F));
         employees.add(new Employee("74041446125", "Dirx", "Belig", "Male", new Date(14, 4, 1974), "Istanbul", "Hermesdijkstraat 17", 1,
-                BigDecimal.valueOf(20.00), EmployeeContractType.WORKER, new Company("CFC", "Compact BVBA", "Weg naar As 264", 1,"BE"), 100F));
+                BigDecimal.valueOf(20.00), EmployeeContract.WORKER, new Company("CFC", "Compact BVBA", "Weg naar As 264", 1,"BE"), 100F));
 
         fileAndObjectOIStreamClass.fileObjectOutput(employees, fileName );
         //fileObjectOutput(employees);
